@@ -1,0 +1,22 @@
+{
+  "name": "adventofcode-hgc",
+  "version": "0.0.1",
+  "description": "",
+  "dependencies": {
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hgcummings/adventofcode.git"
+  },
+  "author": "hgcummings",
+  "license": "",
+  "bugs": {
+    "url": "https://github.com/hgcummings/adventofcode/issues"
+  },
+  "homepage": "https://github.com/hgcummings/adventofcode#readme"
+}
