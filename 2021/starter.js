@@ -1,5 +1,6 @@
 const fs = require('fs');
 const readline = require('readline');
+const _ = require('lodash');
 
 async function processLineByLine() {
     const fileStream = fs.createReadStream(process.argv[2] || 'input.txt');
@@ -14,7 +15,7 @@ async function processLineByLine() {
         lines.push(line);
     }
 
-    console.log(increases);
+    console.log(lines.length);
   }
   
   processLineByLine();
