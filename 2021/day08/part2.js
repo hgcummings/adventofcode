@@ -24,7 +24,7 @@ async function processLineByLine() {
       digits[8] = ins.filter(d => d.length === 7)[0];
 
       for (let digit of ins.filter(d => d.length === 6)) {
-        if (_.difference(digit, _.union(digits[7], digits[4])).length === 1) {
+        if (_.difference(digit, digits[4]).length === 2) {
           digits[9] = digit;
         } else if (_.difference(digit, digits[7]).length === 3) {
           digits[0] = digit;
