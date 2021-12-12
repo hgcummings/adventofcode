@@ -4,21 +4,21 @@ const _ = require('lodash');
 
 async function processLineByLine() {
     const fileStream = fs.createReadStream(process.argv[2] || 'input.txt');
-  
+    
     const rl = readline.createInterface({
-      input: fileStream,
-      crlfDelay: Infinity
+        input: fileStream,
+        crlfDelay: Infinity
     });
-
+    
     let floor = [];
-
+    
     for (let y = 0; y < 1000; ++y) {
         floor[y] = [];
         for (let x = 0; x < 1000; ++x) {
             floor[y][x] = 0;
         }
     }
-  
+    
     for await (const line of rl) {
         const [start, end] = line.split(" -> ");
         let [x1, y1] = start.split(",").map(c => parseInt(c, 10));
@@ -40,13 +40,9 @@ async function processLineByLine() {
             }
         }
     }
-
-    //  for (let y = 0; y < floor[0].length; ++y) {
-    //      console.log(floor[y].join());
-    //  }
-
+    
     let count = 0;
-
+    
     for (let y = 0; y < 1000; ++y) {
         for (let x = 0; x < 1000; ++x) {
             if (floor[y][x] >= 2){
@@ -54,8 +50,8 @@ async function processLineByLine() {
             }
         }
     }
-
+    
     console.log(count);
-  }
-  
-  processLineByLine();
+}
+
+processLineByLine();

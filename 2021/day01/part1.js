@@ -3,12 +3,12 @@ const readline = require('readline');
 
 async function processLineByLine() {
     const fileStream = fs.createReadStream('input.txt');
-  
+    
     const rl = readline.createInterface({
-      input: fileStream,
-      crlfDelay: Infinity
+        input: fileStream,
+        crlfDelay: Infinity
     });
-  
+    
     let increases = 0;
     let last = null;
     for await (const line of rl) {
@@ -18,8 +18,8 @@ async function processLineByLine() {
         }
         last = current;
     }
-
+    
     console.log(increases);
-  }
-  
-  processLineByLine();
+}
+
+processLineByLine();

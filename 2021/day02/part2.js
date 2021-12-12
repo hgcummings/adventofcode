@@ -3,12 +3,12 @@ const readline = require('readline');
 
 async function processLineByLine() {
     const fileStream = fs.createReadStream('input.txt');
-  
+    
     const rl = readline.createInterface({
-      input: fileStream,
-      crlfDelay: Infinity
+        input: fileStream,
+        crlfDelay: Infinity
     });
-  
+    
     let pos = 0;
     let depth = 0;
     let aim = 0;
@@ -19,11 +19,11 @@ async function processLineByLine() {
             case "forward":
                 pos += mag;
                 depth += aim * mag;
-                break;
-            case "down":
+            break;
+                case "down":
                 aim += mag;
-                break;
-            case "up":
+            break;
+                case "up":
                 aim -= mag;
                 break;
             default:
@@ -31,8 +31,8 @@ async function processLineByLine() {
                 break;
         }
     }
-
+    
     console.log(pos, depth, pos * depth);
-  }
-  
-  processLineByLine();
+}
+
+processLineByLine();

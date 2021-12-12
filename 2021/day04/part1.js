@@ -4,70 +4,66 @@ const _ = require('lodash');
 
 async function processLineByLine() {
     const fileStream = fs.createReadStream(process.argv[2] || 'input.txt');
-  
+    
     const rl = readline.createInterface({
-      input: fileStream,
-      crlfDelay: Infinity
+        input: fileStream,
+        crlfDelay: Infinity
     });
-  
+    
     let numbers = null;
     let boards = [];
     let currentBoard = [];
     for await (const line of rl) {
         if (line.length === 0) {
-          continue;
+            continue;
         }
-
+        
         if (!numbers) {
-          numbers = line.split(",").map(n => parseInt(n, 10));
+            numbers = line.split(",").map(n => parseInt(n, 10));
         } else {
-          let row = line
+            let row = line
             .split(/\s+/)
             .map(n => parseInt(n, 10))
             .filter(isFinite);
-          currentBoard.push(...row);
-          if (currentBoard.length === 25) {
-            boards.push(currentBoard);
-            currentBoard = [];
-          }
+            currentBoard.push(...row);
+            if (currentBoard.length === 25) {
+                boards.push(currentBoard);
+                currentBoard = [];
+            }
         }
         
     }
-
+    
     function checkWin(board) {
-      lines = _.chunk(board, 5); // rows
-
-      for (let i = 0; i < 5; ++i) { // cols
-        lines.push(board.filter((n, j) => j % 5 === i));
-      }
-
-      for (let line of lines) {
-        if (!line.some(isFinite)) {
-          return true;
+        lines = _.chunk(board, 5); // rows
+        
+        for (let i = 0; i < 5; ++i) { // cols
+            lines.push(board.filter((n, j) => j % 5 === i));
         }
-      }
-
-      return false;
-    }
-
-    for (let number of numbers) {
-      for (let board of boards) {
-        for (let index in board) {
-          if (board[index] === number) {
-            board[index] = NaN;
-            if (checkWin(board)) {
-              sum = board.reduce((prev, cur) => prev + (cur || 0), 0);
-              console.log(sum, number, sum * number);
-              return;
+        
+        for (let line of lines) {
+            if (!line.some(isFinite)) {
+                return true;
             }
-          }
         }
-      }
+        
+        return false;
     }
+    
+    for (let number of numbers) {
+        for (let board of boards) {
+            for (let index in board) {
+                if (board[index] === number) {
+                    board[index] = NaN;
+                    if (checkWin(board)) {
+                        sum = board.reduce((prev, cur) => prev + (cur || 0), 0);
+                        console.log(sum, number, sum * number);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+}
 
-    // console.log(`Unused numbers: ${currentBoard.length}`);
-
-    // console.log(numbers, boards);
-  }
-  
-  processLineByLine();
+processLineByLine();
