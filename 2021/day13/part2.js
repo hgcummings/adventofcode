@@ -39,11 +39,19 @@ async function processLineByLine() {
         }
 
         dots = _.uniqWith(dots, _.isEqual);
-
-        break;
     }
     
-    console.log(dots.length);
+    for (let y = 0; y < 10; ++y) {
+        let line = "";
+        for (let x = 0; x < 80; ++x) {
+            if (dots.find(dot => dot.x === x && dot.y === y)){
+                line += "#";
+            } else {
+                line += " ";
+            }
+        }
+        console.log(line);
+    }
 }
 
 processLineByLine();
