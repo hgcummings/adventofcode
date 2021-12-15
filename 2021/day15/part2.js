@@ -45,7 +45,8 @@ async function processLineByLine() {
 
      // Based on the pseudo-code from https://en.wikipedia.org/wiki/A*_search_algorithm#Pseudocode
      function findPath(start, goal) {
-        openSet = [start]
+        const openSet = [start];
+        const seen = new Set();
 
         cameFrom = [];
         gScore = [];
@@ -77,12 +78,12 @@ async function processLineByLine() {
         fScore[start[1]][start[0]] = h(start);
 
         while (openSet.length) {
-            current = _.minBy(openSet, pos => f(pos))
+            current = openSet.shift();
+
             if (_.isEqual(current, goal)) {
                 return g(goal);
             }
             
-            _.remove(openSet, pos => _.isEqual(pos, current))
             for (neighbour of neighbours(current)) {
                 if (_.isEqual(neighbour, cameFrom[current[1],current[0]])) {
                     continue;
@@ -97,9 +98,8 @@ async function processLineByLine() {
                     gScore[neighbour[1]][neighbour[0]] = tentative_gScore
 
                     fScore[neighbour[1]][neighbour[0]] = tentative_gScore + h(neighbour)
-                    if (!openSet.find(pos => _.isEqual(pos, neighbour))) {
-                        openSet.push(neighbour)
-                    }
+                    
+                    openSet.splice(_.sortedIndexBy(openSet, neighbour, f), 0, neighbour);
                 }
             }
         }
