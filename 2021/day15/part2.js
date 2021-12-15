@@ -71,7 +71,7 @@ async function processLineByLine() {
         }
         
         function h(pos) {
-            return (pos[0]-start[0] + pos[1]-start[1]);
+            return (goal[0] - pos[0] + goal[1] - pos[1]);
         }
 
         gScore[start[1]][start[0]] = 0;
