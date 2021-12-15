@@ -47,25 +47,34 @@ async function processLineByLine() {
      function findPath(start, goal) {
         openSet = [start]
 
-        cameFrom = {}
+        cameFrom = [];
+        gScore = [];
+        fScore = [];
 
-        gScore = {}
-        gScore[start] = 0
+        for (let y = 0; y < height * 5; ++y) {
+            gScore[y] = [];
+            fScore[y] = [];
+            cameFrom[y] = [];
+            for (let x = 0; x < width * 5; ++x) {
+                gScore[y][x] = Infinity;
+                fScore[y][x] = Infinity;
+            }
+        }
 
-        fScore = {}
-        fScore[start] = h(start)
-    
         function f(pos) {
-            return pos in fScore ? fScore[pos] : Infinity;
+            return fScore[pos[1]][pos[0]];
         }
 
         function g(pos) {
-            return pos in gScore ? gScore[pos] : Infinity;
+            return gScore[pos[1]][pos[0]];
         }
         
-        function h(position) {
-            return (position[0]-start[0] + position[1]-start[1]);
+        function h(pos) {
+            return (pos[0]-start[0] + pos[1]-start[1]);
         }
+
+        gScore[start[1]][start[0]] = 0;
+        fScore[start[1]][start[0]] = h(start);
 
         while (openSet.length) {
             current = _.minBy(openSet, pos => f(pos))
@@ -75,7 +84,7 @@ async function processLineByLine() {
             
             _.remove(openSet, pos => _.isEqual(pos, current))
             for (neighbour of neighbours(current)) {
-                if (_.isEqual(neighbour, cameFrom[current])) {
+                if (_.isEqual(neighbour, cameFrom[current[1],current[0]])) {
                     continue;
                 }
 
@@ -83,11 +92,11 @@ async function processLineByLine() {
                 previous_gScore = g(neighbour)
 
                 if (tentative_gScore < previous_gScore) {
-                    cameFrom[neighbour] = current
+                    cameFrom[neighbour[1]][neighbour[0]] = current
 
-                    gScore[neighbour] = tentative_gScore
+                    gScore[neighbour[1]][neighbour[0]] = tentative_gScore
 
-                    fScore[neighbour] = tentative_gScore + h(neighbour)
+                    fScore[neighbour[1]][neighbour[0]] = tentative_gScore + h(neighbour)
                     if (!openSet.find(pos => _.isEqual(pos, neighbour))) {
                         openSet.push(neighbour)
                     }
