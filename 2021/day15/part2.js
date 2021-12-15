@@ -46,42 +46,29 @@ async function processLineByLine() {
      // Based on the pseudo-code from https://en.wikipedia.org/wiki/A*_search_algorithm#Pseudocode
      function findPath(start, goal) {
         const openSet = [start];
-        const seen = new Set();
 
         cameFrom = [];
-        gScore = [];
-        fScore = [];
+        const pathCosts = [];
 
         for (let y = 0; y < height * 5; ++y) {
-            gScore[y] = [];
-            fScore[y] = [];
+            pathCosts[y] = [];
             cameFrom[y] = [];
             for (let x = 0; x < width * 5; ++x) {
-                gScore[y][x] = Infinity;
-                fScore[y][x] = Infinity;
+                pathCosts[y][x] = Infinity;
             }
         }
 
-        function f(pos) {
-            return fScore[pos[1]][pos[0]];
-        }
-
-        function g(pos) {
-            return gScore[pos[1]][pos[0]];
+        function pathCostOf(pos) {
+            return pathCosts[pos[1]][pos[0]];
         }
         
-        function h(pos) {
-            return (goal[0] - pos[0] + goal[1] - pos[1]);
-        }
-
-        gScore[start[1]][start[0]] = 0;
-        fScore[start[1]][start[0]] = h(start);
+        pathCosts[start[1]][start[0]] = 0;
 
         while (openSet.length) {
             current = openSet.shift();
 
             if (_.isEqual(current, goal)) {
-                return g(goal);
+                return pathCostOf(goal);
             }
             
             for (neighbour of neighbours(current)) {
@@ -89,17 +76,15 @@ async function processLineByLine() {
                     continue;
                 }
 
-                tentative_gScore = g(current) + r(neighbour)
-                previous_gScore = g(neighbour)
+                let newPathCost = pathCostOf(current) + r(neighbour);
+                let prevPathCost = pathCostOf(neighbour);
 
-                if (tentative_gScore < previous_gScore) {
-                    cameFrom[neighbour[1]][neighbour[0]] = current
+                if (newPathCost < prevPathCost) {
+                    cameFrom[neighbour[1]][neighbour[0]] = current;
 
-                    gScore[neighbour[1]][neighbour[0]] = tentative_gScore
+                    pathCosts[neighbour[1]][neighbour[0]] = newPathCost;
 
-                    fScore[neighbour[1]][neighbour[0]] = tentative_gScore + h(neighbour)
-                    
-                    openSet.splice(_.sortedIndexBy(openSet, neighbour, f), 0, neighbour);
+                    openSet.splice(_.sortedIndexBy(openSet, neighbour, pathCostOf), 0, neighbour);
                 }
             }
         }
@@ -107,10 +92,8 @@ async function processLineByLine() {
         return false;
     }
     
-    const start = Date.now();
     const cost = findPath([0,0], [(width*5)-1, (height*5)-1]);
     console.log(cost);
-    console.log((Date.now() - start) / 1000);
 }
 
 processLineByLine();
