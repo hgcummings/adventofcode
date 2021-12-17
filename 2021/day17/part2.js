@@ -15,11 +15,10 @@ const ymin = -142;
 const ymax = -88;
 
 let isValid = true;
-let yinit, ypeak;
+let yinit;
 let count = 0;
 for (yinit = ymin; yinit < -1 * (ymin - 1); ++yinit) {
     isValid = false;
-    ypeak = -Infinity;
     for (let xinit = 0; xinit < xmax + 1; ++xinit) {
         let hit = false, missed = false;
         let x = 0, y = 0;
@@ -29,10 +28,6 @@ for (yinit = ymin; yinit < -1 * (ymin - 1); ++yinit) {
             y += dy;
             dx -= Math.sign(dx);
             dy -= 1;
-
-            if (y > ypeak) {
-                ypeak = y;
-            }
 
             if (x > xmax || y < ymin) {
                 missed = true;
