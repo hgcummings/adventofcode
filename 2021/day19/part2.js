@@ -1,7 +1,8 @@
 const fs = require('fs');
 const readline = require('readline');
 const _ = require('lodash');
-const { matrix, multiply, transpose } = require('mathjs');
+const { matrix, multiply } = require('mathjs');
+const ArrayKeyedMap = require('array-keyed-map');
 
 async function processLineByLine() {
     const fileStream = fs.createReadStream(process.argv[2] || 'input.txt');
@@ -85,24 +86,26 @@ async function processLineByLine() {
         for (const transformation of transformations) {
             const bs = map_b.beacons.map(beacon => multiply(beacon, transformation)._data);
 
-            let translations = [];
+            let counts = new ArrayKeyedMap();
             for (const a of as) {
                 for (const b of bs) {
-                    translations.push([a[0]-b[0], a[1]-b[1], a[2]-b[2]]);
-                }
-            }
-            
-            const counts = _.countBy(translations, t => t.toString());
-            for (const key in counts) {
-                if (counts[key] >= 12) {
-                    const t = JSON.parse('[' + key + ']');
-                    s.push(t);
-                    const tbs = bs.map(b => [b[0] + t[0], b[1] + t[1], b[2] + t[2]]);
-
-                    const allBeacons = tbs.concat(as);
-                    const uniqueBeacons = _.uniqWith(allBeacons, _.isEqual);
-                    return {
-                        beacons: uniqueBeacons
+                    const t = [a[0]-b[0], a[1]-b[1], a[2]-b[2]];
+                    if (!counts.has(t)) {
+                        counts.set(t, 1);
+                    } else {
+                        const count = counts.get(t);
+                        if (count < 11) {
+                            counts.set(t, count + 1);
+                        } else {
+                            s.push(t);
+                            const tbs = bs.map(b => [b[0] + t[0], b[1] + t[1], b[2] + t[2]]);
+        
+                            const allBeacons = tbs.concat(as);
+                            const uniqueBeacons = _.uniqWith(allBeacons, _.isEqual);
+                            return {
+                                beacons: uniqueBeacons
+                            }
+                        }
                     }
                 }
             }
