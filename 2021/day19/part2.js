@@ -92,10 +92,10 @@ async function processLineByLine() {
                 }
             }
             
-            const counts = _.countBy(translations, t => JSON.stringify(t));
+            const counts = _.countBy(translations, t => t.toString());
             for (const key in counts) {
                 if (counts[key] >= 12) {
-                    const t = JSON.parse(key);
+                    const t = JSON.parse('[' + key + ']');
                     s.push(t);
                     const tbs = bs.map(b => [b[0] + t[0], b[1] + t[1], b[2] + t[2]]);
 
