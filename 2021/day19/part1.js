@@ -97,14 +97,8 @@ async function processLineByLine() {
                     const t = JSON.parse(key);
                     const tbs = bs.map(b => [b[0] + t[0], b[1] + t[1], b[2] + t[2]]);
 
-                    console.log("Found match");
-                    // console.log(as.length, tbs.length);
                     const allBeacons = tbs.concat(as);
-                    // console.log(allBeacons.length);
-                    // console.log(allBeacons);
                     const uniqueBeacons = _.uniqWith(allBeacons, _.isEqual);
-                    // console.log(uniqueBeacons.length);
-                    // console.log(uniqueBeacons);
                     return {
                         beacons: uniqueBeacons
                     }
