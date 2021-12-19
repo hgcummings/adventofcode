@@ -79,6 +79,7 @@ async function processLineByLine() {
         }
     }
 
+    const s = [[0,0,0]];
     function tryMerge(map_a, map_b) {
         const as = map_a.beacons;
         for (const transformation of transformations) {
@@ -95,6 +96,7 @@ async function processLineByLine() {
             for (const key in counts) {
                 if (counts[key] >= 12) {
                     const t = JSON.parse(key);
+                    s.push(t);
                     const tbs = bs.map(b => [b[0] + t[0], b[1] + t[1], b[2] + t[2]]);
 
                     console.log("Found match");
@@ -127,8 +129,18 @@ async function processLineByLine() {
             }
         }
     }
+
+    let maxDistance = -Infinity;
+    for (let i = 0; i < s.length - 1; ++i) {
+        for (let j = i + 1; j < s.length; ++j) {
+            const distance = Math.abs(s[i][0] - s[j][0]) + Math.abs(s[i][1] - s[j][1]) + Math.abs(s[i][2] - s[j][2]);
+            if (distance > maxDistance) {
+                maxDistance = distance;
+            }
+        }
+    }
     
-    console.log(maps[0].beacons.length);
+    console.log(maxDistance);
 }
 
 processLineByLine();
