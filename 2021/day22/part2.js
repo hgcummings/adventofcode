@@ -42,19 +42,23 @@ async function processLineByLine() {
         return isValid(overlap) ? overlap : false;
     }
 
-    function split(a, b) {
+    function split(a, b, includeB) {
         const xRanges = [[a.x1, b.x1-1],[b.x1, b.x2],[b.x2 + 1, a.x2]];
         const yRanges = [[a.y1, b.y1-1],[b.y1, b.y2],[b.y2 + 1, a.y2]];
         const zRanges = [[a.z1, b.z1-1],[b.z1, b.z2],[b.z2 + 1, a.z2]];
 
         const splitRegions = [];        
-        for (const xRange of xRanges) {
-            for (const yRange of yRanges) {
-                for (const zRange of zRanges) {
+        for (let i = 0; i < 3; ++i) {
+            for (let j = 0; j < 3; ++j) {
+                for (let k = 0; k < 3; ++k) {
+                    if ((!includeB) && i === 1 && j === 1 && k === 1) {
+                        continue;
+                    }
+
                     const splitRegion = {
-                        x1: xRange[0], x2: xRange[1],
-                        y1: yRange[0], y2: yRange[1],
-                        z1: zRange[0], z2: zRange[1]
+                        x1: xRanges[i][0], x2: xRanges[i][1],
+                        y1: yRanges[j][0], y2: yRanges[j][1],
+                        z1: zRanges[k][0], z2: zRanges[k][1]
                     };
                     if (isValid(splitRegion)) {
                         splitRegions.push(splitRegion);
@@ -73,24 +77,25 @@ async function processLineByLine() {
     let onRegions = [];
     for (let ci = 0; ci < cmds.length; ++ci) {
         const sw = cmds[ci].cmd;
-        console.log(`${ci+1} / ${cmds.length}`);
+        if ((ci+1) % 60 === 0) {
+            console.log(`${ci+1} / ${cmds.length}`);
+        }
         const cmdRegions = [cmds[ci]];
+
+        let overlapRegions;
+        [overlapRegions, onRegions] = _.partition(onRegions, r => findOverlap(r, cmds[ci]));
+
         while (cmdRegions.length) {
             const cmdRegion = cmdRegions.pop();
             let overlap;
-            for (let i = 0; i < onRegions.length; ++i) {
-                const onRegion = onRegions[i];
-                overlap = findOverlap(cmdRegion, onRegion);
+            for (let i = 0; i < overlapRegions.length; ++i) {
+                const overlapRegion = overlapRegions[i];
+                
+                overlap = findOverlap(cmdRegion, overlapRegion);
                 if (overlap) {
-                    const newOnRegions = split(onRegion, overlap);
-                    if (sw === false) {
-                        const index = newOnRegions.findIndex(reg => _.isEqual(reg, overlap));
-                        newOnRegions.splice(index, 1);
-                    }
-                    onRegions.splice(i, 1, ...newOnRegions);
-                    const newCmdRegions = split(cmdRegion, overlap);
-                    const index = newCmdRegions.findIndex(reg => _.isEqual(reg, overlap));
-                    newCmdRegions.splice(index, 1);
+                    const newOverlapRegions = split(overlapRegion, overlap, sw);
+                    overlapRegions.splice(i, 1, ...newOverlapRegions);
+                    const newCmdRegions = split(cmdRegion, overlap, false);
                     cmdRegions.push(...newCmdRegions);
                     break;
                 }
@@ -100,7 +105,9 @@ async function processLineByLine() {
                     onRegions.push(cmdRegion);
                 }
             }
-        }  
+        }
+
+        onRegions.push(...overlapRegions);
     }
 
     console.log(_.sumBy(onRegions, size));
