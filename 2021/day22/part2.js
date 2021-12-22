@@ -27,41 +27,38 @@ async function processLineByLine() {
         });
     }
 
+    function isValid(r) {
+        return (r.x1 <= r.x2 &&
+                r.y1 <= r.y2 &&
+                r.z1 <= r.z2);
+    }
+
     function findOverlap(a, b) {
-        const o = {
+        const overlap = {
             x1: Math.max(a.x1, b.x1), x2: Math.min(a.x2, b.x2),
             y1: Math.max(a.y1, b.y1), y2: Math.min(a.y2, b.y2),
             z1: Math.max(a.z1, b.z1), z2: Math.min(a.z2, b.z2)
         }
-        if (o.x2 < o.x1 || 
-            o.y2 < o.y1 || 
-            o.z2 < o.z1) {
-            return false;
-        }
-        return o;
+        return isValid(overlap) ? overlap : false;
     }
 
     function split(a, b) {
         const xRanges = [[a.x1, b.x1-1],[b.x1, b.x2],[b.x2 + 1, a.x2]];
         const yRanges = [[a.y1, b.y1-1],[b.y1, b.y2],[b.y2 + 1, a.y2]];
         const zRanges = [[a.z1, b.z1-1],[b.z1, b.z2],[b.z2 + 1, a.z2]];
-        for (const ranges of [xRanges, yRanges, zRanges]) {
-            for (let i = ranges.length - 1; i >= 0; --i) {
-                if (ranges[i][1] < ranges[i][0]) {
-                    ranges.splice(i,1);
-                }
-            }
-        }
 
         const splitRegions = [];        
         for (const xRange of xRanges) {
             for (const yRange of yRanges) {
                 for (const zRange of zRanges) {
-                    splitRegions.push({
+                    const splitRegion = {
                         x1: xRange[0], x2: xRange[1],
                         y1: yRange[0], y2: yRange[1],
                         z1: zRange[0], z2: zRange[1]
-                    })
+                    };
+                    if (isValid(splitRegion)) {
+                        splitRegions.push(splitRegion);
+                    }
                 }
             }
         }
