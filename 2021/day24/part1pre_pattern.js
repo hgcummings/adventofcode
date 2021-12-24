@@ -49,24 +49,15 @@ async function processLineByLine() {
         console.log(`    
     w = Math.floor(input / ${Math.pow(10, --i)}) % 10;
     if (w === 0) { return false; }
-    x = x * 0;
-    x = x + z;
-    if (x < 0 || 26 <= 0) { return false; }
+    x = z;
+    if (x < 0) { return false; }
     x = x % 26;
-    if (${c[0]} === 0) { return false; }
-    z = z / ${c[0]};
+    z = Math.floor(z / ${c[0]});
     x = x + ${c[1]};
-    x = x === w ? 1 : 0;
-    x = x === 0 ? 1 : 0;
-    y = y * 0;
-    y = y + 25;
-    y = y * x;
-    y = y + 1;
+    x = x === w ? 0 : 1;
+    y = (25 * x) + 1;
     z = z * y;
-    y = y * 0;
-    y = y + w;
-    y = y + ${c[2]};
-    y = y * x;
+    y = (w + ${c[2]}) * x;
     z = z + y;
     `)
     }
