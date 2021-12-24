@@ -46,7 +46,7 @@ for (let i = 0; i < constants.length; ++i) {
             z = z + y;
             if (i < 13 || z === 0) {
                 const newVal = val + (d * (Math.pow(10, 13 - i)));
-                if (!(newStates.has([x,y,z]) && newStates.get([x,y,z]) >= newVal)) {
+                if (!(newStates.has([x,y,z]) && newStates.get([x,y,z]) <= newVal)) {
                     newStates.set([x,y,z], newVal);
                 }
             }
@@ -56,11 +56,11 @@ for (let i = 0; i < constants.length; ++i) {
     console.log(states.size);
 }
 
-let maxVal = -Infinity;
+let minVal = Infinity;
 for (const val of states.values()) {
-    if (val > maxVal) {
-        maxVal = val;
+    if (val < minVal) {
+        minVal = val;
     }
 }
-console.log(maxVal);
+console.log(minVal);
 console.log(`(Took ${Math.round(performance.now() - startTime) / 1000}s)`);
