@@ -24,7 +24,7 @@ async function processLineByLine() {
         });
     }
 
-    let constants = [
+    const constants = [
         [1,14,12],
         [1,15,7],
         [1,12,1],
@@ -40,21 +40,37 @@ async function processLineByLine() {
         [26,0,3],
         [26,-4,11]
     ];
-    
-    function findValid(z, c, prefix) {
-        if (c < 4) {
+
+    function findValid(prevZ, c, prefix) {
+        if (c < 6) {
             console.log(prefix);
             console.log(`(${Math.round(performance.now() - startTime) / 1000}s elapsed)`);
         }
 
-        x = z % 26;
-        z = ~~(z/constants[c][0]);
-        x = x + constants[c][1];
-        
-        for (let w = 9; w > 0; --w) {
+        /*  The following code should be equivalent to...
+            x = z;
+            x = x % 26;
+            z = Math.floor(z / ${c[0]});
+            x = x + ${c[1]};
             x = x === w ? 0 : 1;
             y = (25 * x) + 1;
             z = z * y;
+            y = (w + ${c[2]}) * x;
+            z = z + y;
+            if (z < 0) { return false; }
+        */
+
+        let initX = prevZ % 26;
+        // z is positive due to the check before the recursive call,
+        // and constants[c] is only ever positive (1 or 26), so we
+        // can use ~~ as a more efficient Math.trunc here. 
+        let initZ = ~~(prevZ/constants[c][0]);
+        initX = initX + constants[c][1];
+
+        for (let w = 9; w > 0; --w) {
+            let x = initX === w ? 0 : 1;
+            let y = (25 * x) + 1;
+            let z = initZ * y;
             y = (w + constants[c][2]) * x;
             z = z + y;
             if (c === 13) {
