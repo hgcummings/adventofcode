@@ -41,8 +41,8 @@ async function processLineByLine() {
         [26,-4,11]
     ];
     
-    function findValid(w, x, y, z, c, prefix) {
-        if (c < 5) {
+    function findValid(z, c, prefix) {
+        if (c < 4) {
             console.log(prefix);
             console.log(`(${Math.round(performance.now() - startTime) / 1000}s elapsed)`);
         }
@@ -51,8 +51,7 @@ async function processLineByLine() {
         z = ~~(z/constants[c][0]);
         x = x + constants[c][1];
         
-        for (let d = 9; d > 0; --d) {
-            w = d;
+        for (let w = 9; w > 0; --w) {
             x = x === w ? 0 : 1;
             y = (25 * x) + 1;
             z = z * y;
@@ -60,13 +59,13 @@ async function processLineByLine() {
             z = z + y;
             if (c === 13) {
                 if (z === 0) {
-                    return prefix + d;
+                    return prefix + w;
                 }
             } else {
                 if (z < 0) {
                     continue;
                 }
-                let next = findValid(w, x, y, z, c + 1, prefix + (d * Math.pow(10, 13 - c)));
+                let next = findValid(z, c + 1, prefix + (w * Math.pow(10, 13 - c)));
                 if (next) {
                     return next;
                 } else {
@@ -77,7 +76,7 @@ async function processLineByLine() {
         return false;
     }
 
-    console.log(findValid(0,0,0,0,0,0));
+    console.log(findValid(0,0,0));
 
     console.log(`(Took ${Math.round(performance.now() - startTime) / 1000}s)`);
 }
