@@ -46,12 +46,13 @@ async function processLineByLine() {
             console.log(prefix);
             console.log(`(${Math.round(performance.now() - startTime) / 1000}s elapsed)`);
         }
+
+        x = z % 26;
+        z = ~~(z/constants[c][0]);
+        x = x + constants[c][1];
         
         for (let d = 9; d > 0; --d) {
             w = d;
-            x = z % 26;
-            z = ~~(z/constants[c][0]);
-            x = x + constants[c][1]
             x = x === w ? 0 : 1;
             y = (25 * x) + 1;
             z = z * y;
