@@ -24,219 +24,59 @@ async function processLineByLine() {
         });
     }
 
-    for (let num = 99999999999999; ; --num) {
-        if (num % 10000000 === 0) {
-            console.log(num);
+    let constants = [
+        [1,14,12],
+        [1,15,7],
+        [1,12,1],
+        [1,11,2],
+        [26,-5,4],
+        [1,14,15],
+        [1,15,11],
+        [26,-13,5],
+        [26,-16,3],
+        [26,-8,9],
+        [1,15,2],
+        [26,-8,3],
+        [26,0,3],
+        [26,-4,11]
+    ];
+    
+    function findValid(w, x, y, z, c, prefix) {
+        if (c < 6) {
+            console.log(prefix);
             console.log(`(${Math.round(performance.now() - startTime) / 1000}s elapsed)`);
         }
-        if (isValid(num)) {
-            console.log(num);
-            break;
+        for (let d = 9; d > 0; --d) {
+            w = d;
+            x = z % 26;
+            z = ~~(z/constants[c][0]);
+            x = constants[c][1] === w ? 0 : 1;
+            y = (25 * x) + 1;
+            z = z * y;
+            y = (w + constants[c][2]) * x;
+            z = z + y;
+            if (c === 13) {
+                if (z === 0) {
+                    return prefix + d;
+                }
+            } else {
+                if (z < 0) {
+                    continue;
+                }
+                let next = findValid(w, x, y, z, c + 1, prefix + (d * Math.pow(10, 13 - c)));
+                if (next) {
+                    return next;
+                } else {
+                    continue;
+                }
+            }
         }
+        return false;
     }
+
+    console.log(findValid(0,0,0,0,0,0));
 
     console.log(`(Took ${Math.round(performance.now() - startTime) / 1000}s)`);
 }
 
 processLineByLine();
-
-function isValid(input) {
-    let w = 0, x = 0, y = 0, z = 0;
-    
-    w = Math.floor(input / 10000000000000) % 10;
-    if (w === 0) { return false; }
-    x = z;
-    if (x < 0) { return false; }
-    x = x % 26;
-    z = Math.floor(z / 1);
-    x = x + 14;
-    x = x === w ? 0 : 1;
-    y = (25 * x) + 1;
-    z = z * y;
-    y = (w + 12) * x;
-    z = z + y;
-    
-    
-    w = Math.floor(input / 1000000000000) % 10;
-    if (w === 0) { return false; }
-    x = z;
-    if (x < 0) { return false; }
-    x = x % 26;
-    z = Math.floor(z / 1);
-    x = x + 15;
-    x = x === w ? 0 : 1;
-    y = (25 * x) + 1;
-    z = z * y;
-    y = (w + 7) * x;
-    z = z + y;
-    
-    
-    w = Math.floor(input / 100000000000) % 10;
-    if (w === 0) { return false; }
-    x = z;
-    if (x < 0) { return false; }
-    x = x % 26;
-    z = Math.floor(z / 1);
-    x = x + 12;
-    x = x === w ? 0 : 1;
-    y = (25 * x) + 1;
-    z = z * y;
-    y = (w + 1) * x;
-    z = z + y;
-    
-    
-    w = Math.floor(input / 10000000000) % 10;
-    if (w === 0) { return false; }
-    x = z;
-    if (x < 0) { return false; }
-    x = x % 26;
-    z = Math.floor(z / 1);
-    x = x + 11;
-    x = x === w ? 0 : 1;
-    y = (25 * x) + 1;
-    z = z * y;
-    y = (w + 2) * x;
-    z = z + y;
-    
-    
-    w = Math.floor(input / 1000000000) % 10;
-    if (w === 0) { return false; }
-    x = z;
-    if (x < 0) { return false; }
-    x = x % 26;
-    z = Math.floor(z / 26);
-    x = x + -5;
-    x = x === w ? 0 : 1;
-    y = (25 * x) + 1;
-    z = z * y;
-    y = (w + 4) * x;
-    z = z + y;
-    
-    
-    w = Math.floor(input / 100000000) % 10;
-    if (w === 0) { return false; }
-    x = z;
-    if (x < 0) { return false; }
-    x = x % 26;
-    z = Math.floor(z / 1);
-    x = x + 14;
-    x = x === w ? 0 : 1;
-    y = (25 * x) + 1;
-    z = z * y;
-    y = (w + 15) * x;
-    z = z + y;
-    
-    
-    w = Math.floor(input / 10000000) % 10;
-    if (w === 0) { return false; }
-    x = z;
-    if (x < 0) { return false; }
-    x = x % 26;
-    z = Math.floor(z / 1);
-    x = x + 15;
-    x = x === w ? 0 : 1;
-    y = (25 * x) + 1;
-    z = z * y;
-    y = (w + 11) * x;
-    z = z + y;
-    
-    
-    w = Math.floor(input / 1000000) % 10;
-    if (w === 0) { return false; }
-    x = z;
-    if (x < 0) { return false; }
-    x = x % 26;
-    z = Math.floor(z / 26);
-    x = x + -13;
-    x = x === w ? 0 : 1;
-    y = (25 * x) + 1;
-    z = z * y;
-    y = (w + 5) * x;
-    z = z + y;
-    
-    
-    w = Math.floor(input / 100000) % 10;
-    if (w === 0) { return false; }
-    x = z;
-    if (x < 0) { return false; }
-    x = x % 26;
-    z = Math.floor(z / 26);
-    x = x + -16;
-    x = x === w ? 0 : 1;
-    y = (25 * x) + 1;
-    z = z * y;
-    y = (w + 3) * x;
-    z = z + y;
-    
-    
-    w = Math.floor(input / 10000) % 10;
-    if (w === 0) { return false; }
-    x = z;
-    if (x < 0) { return false; }
-    x = x % 26;
-    z = Math.floor(z / 26);
-    x = x + -8;
-    x = x === w ? 0 : 1;
-    y = (25 * x) + 1;
-    z = z * y;
-    y = (w + 9) * x;
-    z = z + y;
-    
-    
-    w = Math.floor(input / 1000) % 10;
-    if (w === 0) { return false; }
-    x = z;
-    if (x < 0) { return false; }
-    x = x % 26;
-    z = Math.floor(z / 1);
-    x = x + 15;
-    x = x === w ? 0 : 1;
-    y = (25 * x) + 1;
-    z = z * y;
-    y = (w + 2) * x;
-    z = z + y;
-    
-    
-    w = Math.floor(input / 100) % 10;
-    if (w === 0) { return false; }
-    x = z;
-    if (x < 0) { return false; }
-    x = x % 26;
-    z = Math.floor(z / 26);
-    x = x + -8;
-    x = x === w ? 0 : 1;
-    y = (25 * x) + 1;
-    z = z * y;
-    y = (w + 3) * x;
-    z = z + y;
-    
-    
-    w = Math.floor(input / 10) % 10;
-    if (w === 0) { return false; }
-    x = z;
-    if (x < 0) { return false; }
-    x = x % 26;
-    z = Math.floor(z / 26);
-    x = x + 0;
-    x = x === w ? 0 : 1;
-    y = (25 * x) + 1;
-    z = z * y;
-    y = (w + 3) * x;
-    z = z + y;
-    
-    
-    w = Math.floor(input / 1) % 10;
-    if (w === 0) { return false; }
-    x = z;
-    if (x < 0) { return false; }
-    x = x % 26;
-    z = Math.floor(z / 26);
-    x = x + -4;
-    x = x === w ? 0 : 1;
-    y = (25 * x) + 1;
-    z = z * y;
-    y = (w + 11) * x;
-    z = z + y;
-    
-    return (z === 0);
-}
