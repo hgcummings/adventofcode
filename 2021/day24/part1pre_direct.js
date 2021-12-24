@@ -41,7 +41,7 @@ async function processLineByLine() {
                 break;
             case "div":
                 console.log(`    if (${instr.b} === 0) { return false; }`);
-                console.log(`    ${instr.a} = ${instr.a} / ${instr.b};`);
+                console.log(`    ${instr.a} = Math.floor(${instr.a} / ${instr.b});`);
                 break;
             case "mod":
                 console.log(`    if (${instr.a} < 0 || ${instr.b} <= 0) { return false; }`);
