@@ -42,15 +42,17 @@ async function processLineByLine() {
     ];
     
     function findValid(w, x, y, z, c, prefix) {
-        if (c < 6) {
+        if (c < 5) {
             console.log(prefix);
             console.log(`(${Math.round(performance.now() - startTime) / 1000}s elapsed)`);
         }
+        
         for (let d = 9; d > 0; --d) {
             w = d;
             x = z % 26;
             z = ~~(z/constants[c][0]);
-            x = constants[c][1] === w ? 0 : 1;
+            x = x + constants[c][1]
+            x = x === w ? 0 : 1;
             y = (25 * x) + 1;
             z = z * y;
             y = (w + constants[c][2]) * x;
