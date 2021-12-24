@@ -26,30 +26,51 @@ async function processLineByLine() {
 
     console.log("function isValid(input) {")
     console.log("    let w = 0, x = 0, y = 0, z = 0;")
-    for (const instr of instructions) {
-        switch (instr.op) {
-            case "inp":
-                console.log(`    ${instr.a} = input.shift();`)
-                break;
-            case "add":
-                console.log(`    ${instr.a} = ${instr.a} + ${instr.b}`);
-                break;
-            case "mul":
-                console.log(`    ${instr.a} = ${instr.a} * ${instr.b}`);
-                break;
-            case "div":
-                console.log(`    if (${instr.b} === 0) { return false; }`);
-                console.log(`    ${instr.a} = ${instr.a} / ${instr.b}`);
-                break;
-            case "mod":
-                console.log(`    if (${instr.a} < 0 || ${instr.b} <= 0) { return false; }`);
-                console.log(`    ${instr.a} = ${instr.a} % ${instr.b}`);
-                break;
-            case "eql":
-                console.log(`    ${instr.a} = ${instr.a} === ${instr.b} ? 1 : 0;`);
-                break;
-        }
+    let i = 14;
+
+    let constants = [
+        [1,14,12],
+        [1,15,7],
+        [1,12,1],
+        [1,11,2],
+        [26,-5,4],
+        [1,14,15],
+        [1,15,11],
+        [26,-13,5],
+        [26,-16,3],
+        [26,-8,9],
+        [1,15,2],
+        [26,-8,3],
+        [26,0,3],
+        [26,-4,11]
+    ]
+
+    for (const c of constants) {
+        console.log(`    
+    w = Math.floor(input / ${Math.pow(10, --i)}) % 10;
+    if (w === 0) { return false; }
+    x = x * 0;
+    x = x + z;
+    if (x < 0 || 26 <= 0) { return false; }
+    x = x % 26;
+    if (${c[0]} === 0) { return false; }
+    z = z / ${c[0]};
+    x = x + ${c[1]};
+    x = x === w ? 1 : 0;
+    x = x === 0 ? 1 : 0;
+    y = y * 0;
+    y = y + 25;
+    y = y * x;
+    y = y + 1;
+    z = z * y;
+    y = y * 0;
+    y = y + w;
+    y = y + ${c[2]};
+    y = y * x;
+    z = z + y;
+    `)
     }
+
     console.log(`    return (z === 0);`);
     console.log("}");
 }
