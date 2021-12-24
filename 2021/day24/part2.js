@@ -1,8 +1,5 @@
-const fs = require('fs');
-const readline = require('readline');
 const _ = require('lodash');
 const {performance} = require('perf_hooks');
-const ArrayKeyedMap = require('array-keyed-map')
 
 const startTime = performance.now();
 
@@ -23,14 +20,15 @@ const constants = [
     [26,-4,11]
 ];
 
-let states = new ArrayKeyedMap();
-states.set([0,0,0],0);
+let states = new Map();
+states.set(0,0);
 
 for (let i = 0; i < constants.length; ++i) {
-    const newStates = new ArrayKeyedMap();
+    const newStates = new Map();
     for (const [state, val] of states.entries()) {
         for (let d = 9; d > 0; --d) {
-            let [x, y, z] = state;
+            let x, y;
+            let z = state;
             let w = d;
             x = z;
             if (x < 0) {
@@ -46,8 +44,8 @@ for (let i = 0; i < constants.length; ++i) {
             z = z + y;
             if (i < 13 || z === 0) {
                 const newVal = val + (d * (Math.pow(10, 13 - i)));
-                if (!(newStates.has([x,y,z]) && newStates.get([x,y,z]) <= newVal)) {
-                    newStates.set([x,y,z], newVal);
+                if (!(newStates.has(z) && newStates.get(z) <= newVal)) {
+                    newStates.set(z, newVal);
                 }
             }
         }
