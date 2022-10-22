@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <RootNamespace>HGC.AOC._2016</RootNamespace>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\HGC.AOC.Common\HGC.AOC.Common.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="01\input.txt" />
+      <EmbeddedResource Include="01\input.txt" />
+    </ItemGroup>
+
+</Project>
