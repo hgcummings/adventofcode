@@ -6,7 +6,7 @@ public class Part2: ISolution
 {
     public string? Answer()
     {
-        var input = this.ReadResource("input.txt");
+        var input = this.ReadInput("input.txt");
 
         var x = 0;
         var y = 0;
