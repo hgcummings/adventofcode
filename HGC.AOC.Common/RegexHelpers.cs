@@ -5,6 +5,11 @@ namespace HGC.AOC.Common;
 
 public static class RegexHelpers
 {
+    public static int GetInt(this Match match, string key)
+    {
+        return Int32.Parse(match.Groups[key].Value);
+    }
+    
     public static T Parse<T>(this Match match) where T : new()
     {
         var result = new T();
