@@ -2,18 +2,21 @@
 
 public static class FileHelpers
 {
-    public static string ReadInput(this ISolution obj, string resourceName)
+    public static StreamReader GetInputStream(this ISolution obj, string resourceName)
     {
         var type = obj.GetType();
         var stream = type.Assembly.GetManifestResourceStream($"{type.Namespace!}.{resourceName}")!;
-        return new StreamReader(stream).ReadToEnd();
+        return new StreamReader(stream);
+    }
+    
+    public static string ReadInput(this ISolution obj, string resourceName)
+    {
+        return GetInputStream(obj, resourceName).ReadToEnd();
     }
 
     public static IEnumerable<string> ReadInputLines(this ISolution obj, string resourceName)
     {
-        var type = obj.GetType();
-        var stream = type.Assembly.GetManifestResourceStream($"{type.Namespace!}.{resourceName}")!;
-        var streamReader = new StreamReader(stream);
+        var streamReader = GetInputStream(obj, resourceName);
         while (!streamReader.EndOfStream)
         {
             yield return streamReader.ReadLine()!;
