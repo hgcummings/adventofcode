@@ -4,7 +4,7 @@ namespace HGC.AOC._2016._03;
 
 public class Part2 : ISolution
 {
-    public string? Answer()
+    public object? Answer()
     {
         var input = this.ReadInputLines("input.txt");
         var possibleCount = 0;

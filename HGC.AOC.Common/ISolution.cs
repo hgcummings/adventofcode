@@ -2,5 +2,5 @@
 
 public interface ISolution
 {
-    public string? Answer();
+    public object? Answer();
 }

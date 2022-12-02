@@ -8,9 +8,10 @@ var stopwatch = new Stopwatch();
 stopwatch.Start();
 var answer = solution.Answer();
 stopwatch.Stop();
+var answerString = answer?.ToString();
 Console.WriteLine($"= Completed in {stopwatch.ElapsedMilliseconds}ms =".ExpandEdges(80));
-Console.WriteLine(answer);
-if (answer != null)
+Console.WriteLine(answerString);
+if (answerString != null)
 {
-    new TextCopy.Clipboard().SetText(answer);
+    new TextCopy.Clipboard().SetText(answerString);
 }

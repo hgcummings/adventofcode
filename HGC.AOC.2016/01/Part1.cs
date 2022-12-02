@@ -4,7 +4,7 @@ namespace HGC.AOC._2016._01;
 
 public class Part1 : ISolution
 {
-    public string? Answer()
+    public object? Answer()
     {
         var input = this.ReadInput("input.txt");
 

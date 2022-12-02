@@ -7,7 +7,7 @@ namespace HGC.AOC._2016._09;
 
 public class Part1 : ISolution
 {
-    public string? Answer()
+    public object? Answer()
     {
         var inputStream = this.GetInputStream("input.txt");
         var markerWriter = new StringBuilder();

@@ -5,7 +5,7 @@ namespace HGC.AOC._2016._10;
 
 public class Part2 : ISolution
 {
-    public string? Answer()
+    public object? Answer()
     {
         var logicRules = new Dictionary<int, Action<int, int>>();
 

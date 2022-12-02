@@ -34,7 +34,7 @@ public struct State
 
 public class Part1 : ISolution
 {
-    public string? Answer()
+    public object? Answer()
     {
         return null;
     }

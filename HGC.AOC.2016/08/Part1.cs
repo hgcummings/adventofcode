@@ -9,7 +9,7 @@ public class Part1 : ISolution
     private const int Width = 50;
     private const int Height = 6;
 
-    public string? Answer()
+    public object? Answer()
     {
         var input = this.ReadInputLines("input.txt");
         

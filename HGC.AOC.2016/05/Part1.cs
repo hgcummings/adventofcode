@@ -7,7 +7,7 @@ namespace HGC.AOC._2016._05;
 
 public class Part1 : ISolution
 {
-    public string? Answer()
+    public object? Answer()
     {
         var input = "ffykfhsq";
         

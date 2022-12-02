@@ -8,7 +8,7 @@ public class Part2 : ISolution
 {
     private readonly Regex _markerRegex = new Regex("(?'count'[0-9]+)x(?'repeat'[0-9]+)");
     
-    public string? Answer()
+    public object? Answer()
     {
         var inputStream = this.GetInputStream("input.txt");
 
