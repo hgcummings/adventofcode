@@ -13,6 +13,7 @@
 
     <ItemGroup>
       <EmbeddedResource Include="01\input.txt" />
+      <EmbeddedResource Include="02\input.txt" />
     </ItemGroup>
 
 </Project>
