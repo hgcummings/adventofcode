@@ -38,9 +38,8 @@ public class Part2 : ISolution
 
         public bool Overlaps(AssignedRange other)
         {
-            return Enumerable.Range(Start, End - Start + 1)
-                .Intersect(Enumerable.Range(other.Start, other.End - other.Start + 1))
-                .Any();
+            return (End >= other.Start && Start <= other.End) ||
+                   (Start <= other.End && End >= other.Start);
         }
     }
 }
