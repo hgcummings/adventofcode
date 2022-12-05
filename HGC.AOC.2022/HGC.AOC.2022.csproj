@@ -24,6 +24,8 @@
       <EmbeddedResource Include="02\input.txt" />
       <EmbeddedResource Include="03\input.txt" />
       <EmbeddedResource Include="04\input.txt" />
+      <EmbeddedResource Include="05\example.txt" />
+      <EmbeddedResource Include="05\input.txt" />
     </ItemGroup>
 
 </Project>
