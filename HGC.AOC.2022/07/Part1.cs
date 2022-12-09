@@ -128,7 +128,7 @@ public class Part1 : ISolution
 
     class File : Entry
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
         public int Size { get; set; }
     }
 
