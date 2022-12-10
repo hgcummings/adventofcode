@@ -5,6 +5,7 @@
         <RootNamespace>HGC.AOC._2022</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <LangVersion>preview</LangVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -34,6 +35,8 @@
       <EmbeddedResource Include="08\input.txt" />
       <EmbeddedResource Include="09\example.txt" />
       <EmbeddedResource Include="09\input.txt" />
+      <EmbeddedResource Include="10\example.txt" />
+      <EmbeddedResource Include="10\input.txt" />
     </ItemGroup>
 
 </Project>
