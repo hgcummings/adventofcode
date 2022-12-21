@@ -41,11 +41,14 @@
       <EmbeddedResource Include="11\input.txt" />
       <EmbeddedResource Include="12\example.txt" />
       <EmbeddedResource Include="12\input.txt" />
+      <EmbeddedResource Include="13\example.txt" />
+      <EmbeddedResource Include="13\input.txt" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.4.0" />
       <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.4.0" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     </ItemGroup>
 
 </Project>
