@@ -42,15 +42,25 @@ public class Part2 : ISolution
 
             foreach (var elf in elves)
             {
-                var neighbours = elves
-                    .Where(e => e.X >= elf.X - 1 && e.X <= elf.X + 1 &&
-                                e.Y >= elf.Y - 1 && e.Y <= elf.Y + 1 &&
-                                e != elf)
-                    .ToList();
+                var neighbours = new List<Point>();
+                for (var x = elf.X - 1; x <= elf.X + 1; ++x)
+                {
+                    for (var y = elf.Y - 1; y <= elf.Y + 1; ++y)
+                    {
+                        if (x != elf.X || y != elf.Y)
+                        {
+                            var neighbour = new Point(x, y);
+                            if (elves.Contains(neighbour))
+                            {
+                                neighbours.Add(neighbour);
+                            }
+                        }
+                    }
+                }
 
                 if (neighbours.Count == 0)
                 {
-                    moves.TryAdd(elf, new List<Point> {elf});
+                    moves.TryAdd(elf, new List<Point> { elf });
                 }
                 else
                 {
@@ -67,10 +77,10 @@ public class Part2 : ISolution
                             break;
                         }
                     }
-                    
+
                     if (!foundMove)
                     {
-                        moves.TryAdd(elf, new List<Point> {elf});
+                        moves.TryAdd(elf, new List<Point> { elf });
                     }
                 }
             }
