@@ -53,6 +53,8 @@
       <EmbeddedResource Include="17\input.txt" />
       <EmbeddedResource Include="18\example.txt" />
       <EmbeddedResource Include="18\input.txt" />
+      <EmbeddedResource Include="19\example.txt" />
+      <EmbeddedResource Include="19\input.txt" />
       <EmbeddedResource Include="20\example.txt" />
       <EmbeddedResource Include="20\input.txt" />
       <EmbeddedResource Include="21\example.txt" />
