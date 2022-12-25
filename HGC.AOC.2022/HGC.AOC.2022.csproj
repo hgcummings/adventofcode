@@ -66,6 +66,8 @@
       <EmbeddedResource Include="24\example1.txt" />
       <EmbeddedResource Include="24\example0.txt" />
       <EmbeddedResource Include="24\input.txt" />
+      <EmbeddedResource Include="25\example.txt" />
+      <EmbeddedResource Include="25\input.txt" />
     </ItemGroup>
 
     <ItemGroup>

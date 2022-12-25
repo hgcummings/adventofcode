@@ -38,7 +38,7 @@ public class Part1 : ISolution
                                        Math.Abs(end.Y - e.Position.Y);
                 if (e.Minute + minTimeRemaining < best)
                 {
-                    search.Enqueue(e, (minTimeRemaining * 1000) + e.Minute);
+                    search.Enqueue(e, minTimeRemaining + e.Minute);
                 }
             }
         }
