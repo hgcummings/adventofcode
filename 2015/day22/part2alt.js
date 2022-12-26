@@ -1,0 +1,116 @@
+const {performance} = require('perf_hooks');
+const ArrayKeyedMap = require('array-keyed-map');
+
+const startTime = performance.now();
+
+const chain = new ArrayKeyedMap();
+const costs = new ArrayKeyedMap();
+
+const bossInitialHp = 51;
+const bossDamage = 9;
+
+// [bossHp,playerHp,playerMana,shieldT,poisonT,rechargeT];
+const initialState = [bossInitialHp,49,500,0,0,0];
+costs.set(initialState, 0);
+chain.set(initialState, "");
+
+const search = [initialState];
+
+const options = [
+    {   // Magic Missile costs 53 mana. It instantly does 4 damage.
+        applicable: ([_bossHp,_playerHp,playerMana]) => playerMana >= 53,
+        apply: ([bossHp,playerHp,playerMana,shieldT,poisonT,rechargeT]) =>
+                [bossHp-4,playerHp,playerMana-53,shieldT,poisonT,rechargeT]
+    },
+    {   // Drain costs 73 mana. It instantly does 2 damage and heals you for 2 hit points.
+        applicable: ([_bossHp,_playerHp,playerMana]) => playerMana >= 73,
+        apply: ([bossHp,playerHp,playerMana,shieldT,poisonT,rechargeT]) =>
+                [bossHp-2,playerHp+2,playerMana-73,shieldT,poisonT,rechargeT]
+    },
+    {   // Shield costs 113 mana. It starts an effect that lasts for 6 turns. While it is active, your armor is increased by 7.
+        applicable: ([_bossHp,_playerHp,playerMana,shieldT]) => playerMana >= 113 && shieldT === 0,
+        apply: ([bossHp,playerHp,playerMana,_,poisonT,rechargeT]) =>
+                [bossHp,playerHp,playerMana-113,6,poisonT,rechargeT]
+    },
+    {   // Poison costs 173 mana. It starts an effect that lasts for 6 turns. At the start of each turn while it is active, it deals the boss 3 damage.
+        applicable: ([_bossHp,_playerHp,playerMana,_shieldT,poisonT]) => playerMana >= 173 && poisonT === 0,
+        apply: ([bossHp,playerHp,playerMana,shieldT,_,rechargeT]) =>
+                [bossHp,playerHp,playerMana-173,shieldT,6,rechargeT]
+    },
+    {   // Recharge costs 229 mana. It starts an effect that lasts for 5 turns. At the start of each turn while it is active, it gives you 101 new mana.
+        applicable: ([_bossHp,_playerHp,playerMana,_shieldT,_poisonT,rechargeT]) => playerMana >= 229 && rechargeT === 0,
+        apply: ([bossHp,playerHp,playerMana,shieldT,poisonT,_]) =>
+                [bossHp,playerHp,playerMana-229,shieldT,poisonT,5]
+    }
+]
+
+function applyEffects(state) {
+    let [bossHp,playerHp,playerMana,shieldT,poisonT,rechargeT] = state;
+    let playerArmour = 0;
+    if (shieldT > 0) {
+        shieldT -= 1;
+        playerArmour = 7;
+    }
+    if (poisonT > 0) {
+        poisonT -= 1;
+        bossHp -= 3;
+    }
+    if (rechargeT > 0) {
+        rechargeT -= 1;
+        playerMana += 101;
+    }
+    return [[bossHp,playerHp,playerMana,shieldT,poisonT,rechargeT],playerArmour];
+}
+
+let best = Infinity;
+while(search.length) {
+    let startOfRound = search.shift();
+    
+    if (startOfRound[0] <= 0) {
+        if (costs.get(state) < best) {
+            console.log(chain.get(state));
+            console.log(costs.get(state));
+        }
+        continue;
+    }
+
+    let [startOfPlayerTurn] = applyEffects(startOfRound);
+
+    for (const option of options) {
+        if (option.applicable(startOfPlayerTurn)) {
+            const endOfPlayerTurn = option.apply(startOfPlayerTurn);
+            let manaSpent = startOfPlayerTurn[2] - endOfPlayerTurn[2];
+            let newCost = costs.get(startOfRound) + manaSpent;
+
+            const [startOfMonsterTurn,playerArmour] = applyEffects(endOfPlayerTurn);
+            let [bossHp,playerHp,playerMana,shieldT,poisonT,rechargeT] = startOfMonsterTurn;
+            let newChain = chain.get(startOfRound) + `\n (${startOfPlayerTurn}) ${manaSpent} (${endOfPlayerTurn})`;
+           
+            if ((bossHp <= 0)) {
+                if (newCost < best) {
+                    best = newCost;
+                    console.log(newChain);
+                    console.log(best);
+                }
+                continue;
+            }
+
+            const damage = Math.max(1, bossDamage - playerArmour);
+            playerHp -= damage;
+            playerHp -= 1;
+            if (playerHp <= 0) {
+                continue;
+            }
+
+            const endOfMonsterTurn = [bossHp,playerHp,playerMana,shieldT,poisonT,rechargeT];
+            if ((!costs.has(endOfMonsterTurn)) || newCost < costs.get(endOfMonsterTurn)) {
+                costs.set(endOfMonsterTurn, newCost);
+                chain.set(endOfMonsterTurn, newChain);
+
+                search.push(endOfMonsterTurn);
+            }
+        }
+    }
+}
+
+console.log(`(Took ${Math.round(performance.now() - startTime) / 1000}s)`);

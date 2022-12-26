@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "dependencies": {
+    "@datastructures-js/priority-queue": "^6.1.4",
     "array-keyed-map": "^2.1.2",
     "combinatorial-generators": "^1.0.1",
     "gifencoder": "^2.0.1",
@@ -10,7 +11,6 @@
     "mathjs": "^10.0.0",
     "md5": "^2.3.0"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
