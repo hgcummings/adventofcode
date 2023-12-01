@@ -10,6 +10,7 @@
     <ItemGroup>
       <ProjectReference Include="..\HGC.AOC.2016\HGC.AOC.2016.csproj" />
       <ProjectReference Include="..\HGC.AOC.2022\HGC.AOC.2022.csproj" />
+      <ProjectReference Include="..\HGC.AOC.2023\HGC.AOC.2023.csproj" />
       <ProjectReference Include="..\HGC.AOC.Common\HGC.AOC.Common.csproj" />
     </ItemGroup>
 
