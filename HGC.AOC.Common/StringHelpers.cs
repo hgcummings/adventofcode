@@ -2,6 +2,11 @@
 
 public static class StringHelpers
 {
+    public static string[] SplitBySpaces(this string input)
+    {
+        return input.Split(" ", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+    } 
+    
     public static string ExpandEdges(this string input, int length)
     {
         if (input.Length >= length)
