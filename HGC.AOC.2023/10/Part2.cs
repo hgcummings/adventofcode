@@ -251,14 +251,13 @@ public class Part2 : ISolution
         
         var countR = 0;
         var countL = 0;
-        var countOrphan = 0;
         for (var x = 0; x < input.Length; ++x)
         {
             Console.WriteLine();
             for (var y = 0; y < input[x].Length; ++y)
             {
                 var node = nodes[x, y];
-                var symbol = node.Symbol;
+                Console.Write(node.Symbol);
                 if (node.Symbol == '#')
                 {
                     countR++;
@@ -267,17 +266,10 @@ public class Part2 : ISolution
                 {
                     countL++;
                 }
-                else if (!loopA.Contains(node))
-                {
-                    symbol = '!';
-                    countOrphan++;
-                }
-                Console.Write(symbol);
             }
         }
         
-        Console.WriteLine(countOrphan);
-        return Math.Min(countR, countL) + countOrphan;
+        return Math.Min(countR, countL);
     }
 
     class Node
