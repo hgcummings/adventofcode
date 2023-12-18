@@ -35,13 +35,14 @@ public class Part2 : ISolution
         }
         
         var minY = lines.Min(line => Math.Min(line.A.Y, line.B.Y));
-        var maxY = lines.Max(line => Math.Max(line.A.Y, line.B.Y));
 
-        long count = 0;
-
-        for (var y = minY; y <= maxY; ++y)
+        var countsPerRow = new Dictionary<int, long>();
+        foreach (var y in lines
+                     .SelectMany<Line, int>(l => [l.A.Y, l.A.Y + 1, l.B.Y, l.B.Y + 1])
+                     .Distinct())
         {
             var row = y;
+            long countForRow = 0;
             var vLines = lines
                 .Where(line => line.IsVertical && line.IntersectsRow(row))
                 .OrderBy(line => line.A.X);
@@ -51,12 +52,12 @@ public class Part2 : ISolution
             var inPair = false;
             foreach (var line in vLines)
             {
-                count += 1;
+                countForRow += 1;
                 if (line.A.Y != y && line.B.Y != y)
                 {
                     if (inside && prev != null)
                     {
-                        count += line.A.X - prev.Value.A.X - 1;
+                        countForRow += line.A.X - prev.Value.A.X - 1;
                     }
                     inside = !inside;
                 }
@@ -67,11 +68,11 @@ public class Part2 : ISolution
                         if (line.A.Y == prev.Value.B.Y || line.B.Y == prev.Value.A.Y)
                         {
                             inside = !inside;
-                            count += line.A.X - prev.Value.A.X - 1;
+                            countForRow += line.A.X - prev.Value.A.X - 1;
                         }
                         else if (line.A.Y == prev.Value.A.Y || line.B.Y == prev.Value.B.Y)
                         {
-                            count += line.A.X - prev.Value.A.X - 1;
+                            countForRow += line.A.X - prev.Value.A.X - 1;
                         }
                         else
                         {
@@ -84,7 +85,7 @@ public class Part2 : ISolution
                     {
                         if (inside && prev != null)
                         {
-                            count += line.A.X - prev.Value.A.X - 1;
+                            countForRow += line.A.X - prev.Value.A.X - 1;
                         }
                         
                         inPair = true;
@@ -94,13 +95,22 @@ public class Part2 : ISolution
                 prev = line;
             }
 
-            if (y % 100000 == 0)
-            {
-                Console.WriteLine($"{minY}/{y}/{maxY}");
-            }
+            countsPerRow[y] = countForRow;
         }
 
-        return count;
+        var prevY = minY - 1;
+        var prevCount = 0L;
+        var total = 0L;
+        foreach (var (y, count) in countsPerRow.OrderBy(entry => entry.Key))
+        {
+            total += (y - prevY - 1) * prevCount;
+            total += count;
+
+            prevY = y;
+            prevCount = count;
+        }
+
+        return total;
     }
 
     public class Instruction
