@@ -30,6 +30,7 @@
       <EmbeddedResource Include="16\input.txt" />
       <EmbeddedResource Include="17\input.txt" />
       <EmbeddedResource Include="18\input.txt" />
+      <EmbeddedResource Include="19\input.txt" />
     </ItemGroup>
 
 </Project>
