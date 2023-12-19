@@ -30,15 +30,6 @@
       <EmbeddedResource Include="16\input.txt" />
       <EmbeddedResource Include="17\input.txt" />
       <EmbeddedResource Include="18\input.txt" />
-      <EmbeddedResource Remove="18\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Remove="18\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="18\**" />
     </ItemGroup>
 
 </Project>
