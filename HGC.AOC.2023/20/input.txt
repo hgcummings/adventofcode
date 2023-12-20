@@ -1,0 +1,65 @@
+﻿broadcaster -> js, ng, lb, gr
+
+%js -> lr, dc
+    &lr -> ss, rm, dc, js, gk, dp, bq
+        &ss -> ql
+            &ql -> rx
+        %rm -> hj
+            %hj -> lr, bq
+        %dc -> dp
+        %gk -> hm
+            %hm -> lr, rd
+                %rd -> xl, lr
+                    %xl -> gx, lr
+                        %gx -> lr
+        %dp -> xv
+            %xv -> rm, lr
+        %bq -> gk
+
+%ng -> vp, sn
+    %vp -> vf, sn
+        %vf -> th, sn
+            %th -> qb
+        &sn -> sd, fh, th, qb, nl, ng, nc
+            %sd -> nl
+            &fh -> ql
+                &ql -> rx
+            %qb -> nc
+            %nl -> bt
+                %bt -> xd, sn
+                    %xd -> tn, sn
+                        %tn -> sn, tv
+                            %tv -> sn
+            %nc -> sd
+
+%lb -> nj, hl
+    %nj -> xx
+        %xx -> hb
+    &hl -> nj, lb, tl, xx, hb, fp, mf
+        %tl -> kg
+            %kg -> px, hl
+                %px -> hl, tm
+                    %tm -> hl
+        %hb -> qk
+            %qk -> hs, hl
+                %hs -> fp, hl
+        %fp -> xb
+            %xb -> hl, tl
+        &mf -> ql
+            &ql -> rx
+
+%gr -> tf, cb
+    &tf -> cb, jg, fz, gr, zj, qn, kb
+        %jg -> qn
+        &fz -> ql            
+            &ql -> rx
+        %zj -> vr
+            %vr -> tf, hq
+                %hq -> kb, tf
+        %qn -> td
+            %td -> tf, zj
+        %kb -> mq
+            %mq -> tf, fl
+                %fl -> tf, gz
+                    %gz -> tf
+    %cb -> jg
