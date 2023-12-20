@@ -73,30 +73,9 @@ public class Part2 : ISolution
         Console.WriteLine(String.Join(", ",
             history.Select(h => h.FindIndex(IsEndNode))));
 
-        var lengths = history.Select(h => h.FindIndex(IsEndNode)).ToArray();
-        var steps = lengths.Select(l => (long) l).ToArray();
-
-        var c = 0;
-        while (steps.Any(s => s != steps[0]))
-        {
-            var mindex = 0;
-            for (var i = 0; i < steps.Length; ++i)
-            {
-                if (steps[i] < steps[mindex])
-                {
-                    mindex = i;
-                }
-            }
-
-            steps[mindex] += lengths[mindex];
-
-            if (c++ % 100000000 == 0)
-            {
-                Console.WriteLine(steps[0]);
-            }
-        }
-        
-        return steps[0];
+        return history
+            .Select(h => (long) h.FindIndex(IsEndNode))
+            .Aggregate(Arithmetic.LeastCommonMultiple);
     }
 
     private bool IsStartNode(string node)
