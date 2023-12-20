@@ -2,6 +2,11 @@
 using HGC.AOC.Common;
 
 var solution = HGC.AOC._2023.Entry.Current();
+if (args.Length > 0)
+{
+    var part = args.Length > 2 ? int.Parse(args[1]) : 2;
+    solution = HGC.AOC._2023.Entry.DayPart(int.Parse(args[0]), part);
+}
 
 Console.WriteLine($"= Running {solution.GetType().FullName} =".ExpandEdges(80));
 var stopwatch = new Stopwatch();

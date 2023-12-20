@@ -13,4 +13,14 @@ public static class SolutionResolver
 
         return (ISolution) Activator.CreateInstance(solutionClass)!;
     }
+
+    public static ISolution GetDayPartSolution(int day, int part)
+    {
+        Type solutionClass = Assembly.GetCallingAssembly().GetTypes()
+            .Single(type => type.IsAssignableTo(typeof (ISolution)) &&
+                            type.Namespace!.EndsWith($"_{day:00}") &&
+                            type.Name == $"Part{part}");
+
+        return (ISolution) Activator.CreateInstance(solutionClass)!;
+    }
 }
