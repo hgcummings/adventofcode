@@ -16,31 +16,38 @@ public class Part2 : ISolution
                     return new Point3D(coords[0], coords[1], coords[2]);
                 }).OrderBy(p => p.X + p.Y + p.Z).ToArray();
                 return new Brick(ends[0], ends[1]);
-            }).ToArray();
+            }).OrderBy(b => b.From.Z).ToArray();
 
         bool Advance()
         {
             var anyFell = false;
-            foreach (var brick in bricks)
+            for (var i = 0; i < bricks.Length; ++i)
             {
-                if (brick.OnGround)
-                {
-                    continue;
-                }
-                
-                if (brick.SupportedBy().Any(p => (bricks.Any(b => b.Occupies(p)))))
+                Brick a = bricks[i];
+                if (a.OnGround)
                 {
                     continue;
                 }
 
-                brick.Fall();
-                anyFell = true;
+                var newZ = a.From.Z;
+                while (newZ > 1 && !bricks.Take(i).Any(b =>
+                           b.From.Z <= newZ - 1 && b.To.Z >= newZ - 1 &&
+                           b.From.X <= a.To.X && a.From.X <= b.To.X &&
+                           b.From.Y <= a.To.Y && a.From.Y <= b.To.Y))
+                {
+                    newZ--;
+                }
+                
+                if (newZ != a.From.Z)
+                {
+                    a.FallTo(newZ); 
+                    anyFell = true;
+                }
             }
 
             return anyFell;
         }
 
-        Console.WriteLine(String.Join(", ", bricks.Select(b => b.From.Z)));
         Console.WriteLine(bricks.Max(b => b.From.Z));
         for (var i = 0; Advance(); i++)
         {
@@ -54,7 +61,7 @@ public class Part2 : ISolution
         
         IEnumerable<Brick> DirectlySupportedBy(ICollection<Brick> obs)
         {
-            return bricks.Where(b =>
+            return bricks.Where(b => !obs.Contains(b)).Where(b =>
             {
                 var supporters = supportCache.GetOrAdd(b, ub => 
                     bricks.Where(lb => ub.SupportedBy().Intersect(lb.HighestPoints()).Any()).ToArray());
@@ -100,8 +107,6 @@ public class Part2 : ISolution
                 return IndirectlySupportedBy(new[] { b }).Count();
             }).ToArray();
         
-        Console.WriteLine(String.Join(", ", counts));
-
         return counts.Sum();
     }
     
@@ -109,13 +114,6 @@ public class Part2 : ISolution
     {
         public Point3D From { get; private set; } = from;
         public Point3D To { get; private set; } = to;
-
-        public bool Occupies(Point3D p)
-        {
-            return p.X >= From.X && p.X <= To.X &&
-                   p.Y >= From.Y && p.Y <= To.Y &&
-                   p.Z >= From.Z && p.Z <= To.Z;
-        }
 
         public bool OnGround => From.Z == 1;
 
@@ -146,10 +144,10 @@ public class Part2 : ISolution
             }
         }
 
-        public void Fall()
+        public void FallTo(int z)
         {
-            From = new Point3D(From.X, From.Y, From.Z - 1);
-            To = new Point3D(To.X, To.Y, To.Z - 1);
+            To = new Point3D(To.X, To.Y, To.Z - From.Z + z);
+            From = new Point3D(From.X, From.Y, z);
         }
     }
 
