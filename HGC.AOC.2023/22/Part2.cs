@@ -1,5 +1,4 @@
-﻿using System.Collections.Concurrent;
-using HGC.AOC.Common;
+﻿using HGC.AOC.Common;
 
 namespace HGC.AOC._2023._22;
 
@@ -48,66 +47,40 @@ public class Part2 : ISolution
             return anyFell;
         }
 
-        Console.WriteLine(bricks.Max(b => b.From.Z));
-        for (var i = 0; Advance(); i++)
+        while (Advance())
         {
-            if (i % 100 == 0)
-            {
-                Console.WriteLine(bricks.Max(b => b.From.Z));
-            }
         }
 
-        ConcurrentDictionary<Brick, Brick[]> supportCache = new ConcurrentDictionary<Brick, Brick[]>();
+        Dictionary<Brick, Brick[]> directSupport =
+            bricks.ToDictionary(ub => ub, ub => bricks
+                .Where(lb => ub.SupportedBy().Intersect(lb.HighestPoints()).Any()).ToArray());
         
         IEnumerable<Brick> DirectlySupportedBy(ICollection<Brick> obs)
         {
-            return bricks.Where(b => !obs.Contains(b)).Where(b =>
-            {
-                var supporters = supportCache.GetOrAdd(b, ub => 
-                    bricks.Where(lb => ub.SupportedBy().Intersect(lb.HighestPoints()).Any()).ToArray());
-
-                if (supporters.Length > 0 && supporters.All(obs.Contains))
-                {
-                    return true;
-                }
-
-                return false;
-            });
+            return bricks.Where(b => !obs.Contains(b))
+                .Where(b => directSupport[b].Length > 0 && directSupport[b].All(obs.Contains));
         }
         
         IEnumerable<Brick> IndirectlySupportedBy(ICollection<Brick> obs)
         {
             var allSupported = DirectlySupportedBy(obs).ToHashSet();
-            if (allSupported.Count == 0)
+            if (allSupported.Count != 0)
             {
-                return allSupported;
-            }
-
-            var finished = false;
-            while (!finished)
-            {
-                finished = true;
-                foreach (var additional in IndirectlySupportedBy(allSupported))
+                var expanding = true;
+                while (expanding)
                 {
-                    if (allSupported.Add(additional))
+                    expanding = false;
+                    foreach (var additional in IndirectlySupportedBy(allSupported))
                     {
-                        finished = false;
+                        expanding |= allSupported.Add(additional);
                     }
                 }
             }
-            
+
             return allSupported;
         }
 
-        int progress = 0;
-        var counts = bricks.AsParallel().Select(
-            b =>
-            {
-                Console.WriteLine($"{Interlocked.Increment(ref progress)}/{bricks.Length}");
-                return IndirectlySupportedBy(new[] { b }).Count();
-            }).ToArray();
-        
-        return counts.Sum();
+        return bricks.AsParallel().Select(b => IndirectlySupportedBy(new[] { b }).Count()).Sum();
     }
     
     public class Brick(Point3D from, Point3D to)
