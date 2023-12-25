@@ -36,6 +36,11 @@
       <EmbeddedResource Include="22\input.txt" />
       <EmbeddedResource Include="23\input.txt" />
       <EmbeddedResource Include="24\input.txt" />
+      <EmbeddedResource Include="25\input.txt" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Combinatorics" Version="2.0.0" />
     </ItemGroup>
 
 </Project>
