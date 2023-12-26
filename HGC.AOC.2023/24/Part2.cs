@@ -60,7 +60,6 @@ public class Part2 : ISolution
 
     private (long, long) FindVxy(Hailstone[] hailstones, out (long x, long y) pos)
     {
-        var tested = new HashSet<(long, long)>();
         for (var range = 0L;; ++range)
         {
             Console.WriteLine(range);
@@ -68,7 +67,7 @@ public class Part2 : ISolution
             {
                 for (var vy = -range; vy <= range; ++vy)
                 {
-                    if (!tested.Add((vx, vy)))
+                    if (Math.Abs(vx) < range && Math.Abs(vy) < range)
                     {
                         continue;
                     }
