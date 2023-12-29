@@ -20,12 +20,20 @@ public class Part2 : ISolution
                 );
             }).ToArray();
 
-        var (vx, vy) = FindVxy(hailstones, out var pos);
+        
+        
+        var a0 = hailstones.First(s => s.Vel.X != 0 && s.Vel.Y != 0 && s.Vel.Z != 0);
+        var a1 = hailstones.First(s => s.Vel.X != a0.Vel.X && 
+                                       s.Vel.Y != a0.Vel.Y &&
+                                       s.Vel.Z != a0.Vel.Z);
+        var a2 = hailstones.First(s =>  s.Vel.X != a0.Vel.X && 
+                                        s.Vel.Y != a0.Vel.Y &&
+                                        s.Vel.X != a1.Vel.X &&
+                                        s.Vel.Y != a1.Vel.Y);
+        
+        var (vx, vy) = FindVxy(new[] { a0, a1, a2 }, out var pos);
         Console.WriteLine(
             $"Stones have common intersection {pos.x}, {pos.y} for velocity ({vx}, {vy}, ?)");
-
-        var a0 = hailstones[0];
-        var a1 = hailstones.First(s => s.Pos.Z != a0.Pos.Z && s.Vel.Z != a0.Vel.Z);
 
         var r = new Hailstone(new Point3D(pos.x, pos.y, 0), new Point3D(vx, vy, 0), "rock");
 
@@ -62,7 +70,10 @@ public class Part2 : ISolution
     {
         for (var range = 0L;; ++range)
         {
-            Console.WriteLine(range);
+            if (range % 100 == 0)
+            {
+                Console.WriteLine(range);
+            }
             for (var vx = -range; vx <= range; ++vx)
             {
                 for (var vy = -range; vy <= range; ++vy)
