@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <RootNamespace>HGC.AOC._2024</RootNamespace>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\HGC.AOC.Common\HGC.AOC.Common.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="01\example.txt" />
+      <EmbeddedResource Include="01\example.txt" />
+      <None Remove="01\input.txt" />
+      <EmbeddedResource Include="01\input.txt" />
+    </ItemGroup>
+
+</Project>
