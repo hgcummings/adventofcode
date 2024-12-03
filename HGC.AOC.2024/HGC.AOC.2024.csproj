@@ -14,10 +14,13 @@
     <ItemGroup>
       <EmbeddedResource Include="02\example.txt" />
       <EmbeddedResource Include="02\input.txt" />
+      <EmbeddedResource Include="03\input.txt" />
       <None Remove="01\example.txt" />
       <EmbeddedResource Include="01\example.txt" />
       <None Remove="01\input.txt" />
       <EmbeddedResource Include="01\input.txt" />
+      <None Remove="03\example.txt" />
+      <EmbeddedResource Include="03\example.txt" />
     </ItemGroup>
 
 </Project>

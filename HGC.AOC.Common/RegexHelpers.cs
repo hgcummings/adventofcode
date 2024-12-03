@@ -23,7 +23,9 @@ public static class RegexHelpers
                 {
                     member.SetValue(result, match.Groups[key].Value);                    
                 }
-                else if (member.PropertyType == typeof(Int32))
+                else if (member.PropertyType == typeof(Int32) || 
+                         (member.PropertyType == typeof(Int32?) && 
+                          match.Groups[key].Value != String.Empty))
                 {
                     member.SetValue(result, Int32.Parse(match.Groups[key].Value));
                 }
