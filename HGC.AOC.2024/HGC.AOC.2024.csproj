@@ -15,6 +15,7 @@
       <EmbeddedResource Include="02\example.txt" />
       <EmbeddedResource Include="02\input.txt" />
       <EmbeddedResource Include="03\input.txt" />
+      <EmbeddedResource Include="04\input.txt" />
       <None Remove="01\example.txt" />
       <EmbeddedResource Include="01\example.txt" />
       <None Remove="01\input.txt" />
