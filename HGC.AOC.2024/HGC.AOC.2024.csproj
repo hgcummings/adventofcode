@@ -18,12 +18,17 @@
       <EmbeddedResource Include="04\input.txt" />
       <EmbeddedResource Include="05\input.txt" />
       <EmbeddedResource Include="06\input.txt" />
+      <EmbeddedResource Include="07\input.txt" />
       <None Remove="01\example.txt" />
       <EmbeddedResource Include="01\example.txt" />
       <None Remove="01\input.txt" />
       <EmbeddedResource Include="01\input.txt" />
       <None Remove="03\example.txt" />
       <EmbeddedResource Include="03\example.txt" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Combinatorics" Version="2.0.0" />
     </ItemGroup>
 
 </Project>
