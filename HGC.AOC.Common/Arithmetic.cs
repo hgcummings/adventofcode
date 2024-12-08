@@ -4,6 +4,8 @@ public static class Arithmetic
 {
     public static long GreatestCommonDivisor(long a, long b)
     {
+        a = Math.Abs(a);
+        b = Math.Abs(b);
         while (true)
         {
             if (a == b)
