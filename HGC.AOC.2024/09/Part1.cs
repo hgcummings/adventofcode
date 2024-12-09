@@ -40,7 +40,7 @@ public class Part1 : ISolution
         for (var i = 0; i < j; ++i)
         {
             if (disk[i] != -1) continue;
-            while (disk[j] == -1)
+            while (disk[j] == -1 && j > i)
             {
                 j -= 1;
             }
@@ -49,21 +49,6 @@ public class Part1 : ISolution
             disk[j] = -1;
         }
         
-        // Didn't quite work? Do it again!
-        j = disk.Count - 1;
-        for (var i = 0; i < j; ++i)
-        {
-            if (disk[i] != -1) continue;
-            while (disk[j] == -1)
-            {
-                j -= 1;
-            }
-
-            disk[i] = disk[j];
-            disk[j] = -1;
-        }
-        //PrintDisk(disk);
-
         return CheckSum(disk);
     }
 
