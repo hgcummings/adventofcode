@@ -29,6 +29,12 @@ public static class RegexHelpers
                 {
                     member.SetValue(result, Int32.Parse(match.Groups[key].Value));
                 }
+                else if (member.PropertyType == typeof(Int64) || 
+                         (member.PropertyType == typeof(Int64?) && 
+                          match.Groups[key].Value != String.Empty))
+                {
+                    member.SetValue(result, Int64.Parse(match.Groups[key].Value));
+                }
             }
         }
 
