@@ -4,7 +4,7 @@ using HGC.AOC.Common;
 var solution = HGC.AOC._2024.Entry.Current();
 if (args.Length > 0)
 {
-    var part = args.Length > 2 ? int.Parse(args[1]) : 2;
+    var part = args.Length > 1 ? int.Parse(args[1]) : 2;
     solution = HGC.AOC._2024.Entry.DayPart(int.Parse(args[0]), part);
 }
 
