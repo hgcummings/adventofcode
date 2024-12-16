@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using System.Drawing;
+﻿using System.Drawing;
 using HGC.AOC.Common;
 
 namespace HGC.AOC._2024._16;
@@ -17,54 +16,63 @@ public class Part2 : ISolution
         var endX = map[endY].IndexOf('E');
 
         var start = new Node(startX, startY, Dir.East);
-
-        var distances = new Dictionary<Node, int>();
-        distances[start] = 0;
+        
+        var distances = new Dictionary<Node, int> { [start] = 0 };
+        var prev = new Dictionary<Node, List<Node>>();
 
         var queue = new PriorityQueue<Node, int>();
         queue.Enqueue(start, 0);
 
-        var shortestPath = 0;
-
         while (queue.Count > 0)
         {
             var node = queue.Dequeue();
-
+            
             if (node.X == endX && node.Y == endY)
             {
-                shortestPath = distances[node];
                 break;
             }
 
             foreach (var (neighbour, cost) in node.Neighbours(map))
             {
                 var distanceViaNode = distances[node] + cost;
-                if (distanceViaNode < distances.GetValueOrDefault(neighbour, Int32.MaxValue))
+                if (distanceViaNode <= distances.GetValueOrDefault(neighbour, Int32.MaxValue))
                 {
+                    if (distanceViaNode < distances.GetValueOrDefault(neighbour, Int32.MaxValue))
+                    {
+                        prev[neighbour] = new List<Node>();
+                        queue.Enqueue(neighbour, distanceViaNode);
+                    }
                     distances[neighbour] = distanceViaNode;
-                    queue.Enqueue(neighbour, distanceViaNode);
+                    prev[neighbour].Add(node);
                 }
             }
         }
 
-        var paths = start.PathsToEnd(
-                shortestPath,
-                map,
-                endX,
-                endY);
         var tiles = new HashSet<Point>();
+        var prevQueue = new Queue<Node>();
 
-        foreach (var path in paths)
+        foreach (var endNode in prev.Keys.Where(n => n.X == endX && n.Y == endY))
         {
-            foreach (var node in path)
+            prevQueue.Enqueue(endNode);
+        }
+
+        while (prevQueue.Count > 0)
+        {
+            var node = prevQueue.Dequeue();
+            tiles.Add(new Point(node.X, node.Y));
+
+            if (prev.ContainsKey(node))
             {
-                tiles.Add(new Point(node.X, node.Y));
+                foreach (var prevNode in prev[node])
+                {
+                    prevQueue.Enqueue(prevNode);
+                }
             }
         }
 
         return tiles.Count;
     }
-
+    
     struct Node
     {
         public bool Equals(Node other)
@@ -93,146 +101,49 @@ public class Part2 : ISolution
             D = d;
         }
 
-        private static Dictionary<CacheKey, List<IList<Node>>> CachedPaths = new();
-        private static int Hits = 0;
-        private static int Misses = 0;
-        
-        public IEnumerable<IList<Node>> PathsToEnd(
-            int maxCost,
-            List<string> map,
-            int endX,
-            int endY)
-        {
-            var cacheKey = new CacheKey(this, maxCost);
-            if (CachedPaths.TryGetValue(cacheKey, out var cached))
-            {
-                ++Hits;
-                if (Hits % 100000 == 0)
-                {
-                    Console.WriteLine(
-                        $"Hits: {Hits}, Misses: {Misses}, " +
-                        $"MinCost: {CachedPaths.Keys.Min(k => k.Cost)}, " +
-                        $"MaxCost: {CachedPaths.Keys.Max(k => k.Cost)}");
-                }
-                return cached;
-            }
-
-            ++Misses;
-            var paths = PathsToEndRaw(maxCost, map, endX, endY).ToList();
-            CachedPaths.Add(cacheKey, paths);
-            return paths;
-        }
-        
-        public IEnumerable<IList<Node>> PathsToEndRaw(
-            int maxCost,
-            List<string> map,
-            int endX,
-            int endY)
-        {
-            // Console.WriteLine(maxCost);
-            if (X == endX && Y == endY)
-            {
-                yield return [this];
-            }
-            else
-            {
-                foreach (var (n, cost) in Neighbours(map))
-                {
-                    if (cost <= maxCost)
-                    {
-                        foreach (var path in
-                                 n.PathsToEnd(
-                                     maxCost - cost,
-                                     map, endX, endY))
-                        {
-                            yield return [this, ..path];
-                        }
-                    }
-                }
-            }
-        }
-
-        public IEnumerable<(Node neighbour, int cost)> Neighbours(List<string> map)
-        {
-            if (D == Dir.North)
-            {
-                if (Y > 1 && map[Y - 1][X] != '#')
-                {
-                    yield return (new Node(X, Y - 1, D), 1);
-                }
-            }
-
-            if (D == Dir.East)
-            {
-                if (X < map[Y].Length - 1 && map[Y][X + 1] != '#')
-                {
-                    yield return (new Node(X + 1, Y, D), 1);
-                }
-            }
-
-            if (D == Dir.South)
-            {
-                if (Y < map.Count - 1 && map[Y + 1][X] != '#')
-                {
-                    yield return (new Node(X, Y + 1, D), 1);
-                }
-            }
-
-            if (D == Dir.West)
-            {
-                if (X > 1 && map[Y][X - 1] != '#')
-                {
-                    yield return (new Node(X - 1, Y, D), 1);
-                }
-            }
-
-            if (D == Dir.South)
-            {
-                yield return (new Node(X, Y, Dir.East), 1000);
-                yield return (new Node(X, Y, Dir.West), 1000);
-            }
-
-            if (D == Dir.West)
-            {
-                yield return (new Node(X, Y, Dir.North), 1000);
-                yield return (new Node(X, Y, Dir.South), 1000);
-            }
-            
-            if (D == Dir.North)
-            {
-                yield return (new Node(X, Y, Dir.West), 1000);
-                yield return (new Node(X, Y, Dir.East), 1000);
-            }
-
-            if (D == Dir.East)
-            {
-                yield return (new Node(X, Y, Dir.North), 1000);
-                yield return (new Node(X, Y, Dir.South), 1000);
-            }
-        }
-
-        struct CacheKey(Node node, int cost)
-        {
-            public bool Equals(CacheKey other)
-            {
-                return Node.Equals(other.Node) && Cost == other.Cost;
-            }
-
-            public override bool Equals(object? obj)
-            {
-                return obj is CacheKey other && Equals(other);
-            }
-
-            public override int GetHashCode()
-            {
-                return HashCode.Combine(Node, Cost);
-            }
-
-            public Node Node { get; } = node;
-            public int Cost { get; } = cost;
-        }
+         public IEnumerable<(Node neighbour, int cost)> Neighbours(List<string> map)
+         {
+             if (D == Dir.North)
+             {
+                 yield return (new Node(X, Y, Dir.West), 1000);
+                 yield return (new Node(X, Y, Dir.East), 1000);
+                 if (Y > 1 && map[Y - 1][X] != '#')
+                 {
+                     yield return (new Node(X, Y - 1, D), 1);
+                 }
+             }
+             
+             if (D == Dir.East)
+             {
+                 yield return (new Node(X, Y, Dir.North), 1000);
+                 yield return (new Node(X, Y, Dir.South), 1000);
+                 if (X < map[Y].Length - 1 && map[Y][X + 1] != '#')
+                 {
+                     yield return (new Node(X + 1, Y, D), 1);
+                 }
+             }
+             
+             if (D == Dir.South) {
+                 yield return (new Node(X, Y, Dir.West), 1000);
+                 yield return (new Node(X, Y, Dir.East), 1000);
+                 if (Y < map.Count - 1 && map[Y + 1][X] != '#')
+                 {
+                     yield return (new Node(X, Y + 1, D), 1);
+                 }
+             }
+             
+             if (D == Dir.West)
+             {
+                 yield return (new Node(X, Y, Dir.North), 1000);
+                 yield return (new Node(X, Y, Dir.South), 1000);
+                 if (X > 1 && map[Y][X - 1] != '#')
+                 {
+                     yield return (new Node(X - 1, Y, D), 1);
+                 }
+             }
+         }
     }
-
+    
     enum Dir
     {
         East,
