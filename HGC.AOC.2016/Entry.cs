@@ -8,4 +8,9 @@ public class Entry
     {
         return SolutionResolver.GetCurrentSolution();
     }
+
+    public static ISolution DayPart(int day, int part)
+    {
+        return SolutionResolver.GetDayPartSolution(day, part);
+    }
 }
