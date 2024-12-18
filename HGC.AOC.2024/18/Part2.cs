@@ -19,17 +19,14 @@ public class Part2 : ISolution
             var y = Int32.Parse(parts[1]);
             return new Point(x, y);
         }).ToList();
-
-        for (var i = 1024; i <= bytes.Count; ++i)
+        
+        for (var i = bytes.Count; ; --i)
         {
-            if (i % 100 == 0) Console.WriteLine(i);
-            if (!MinDistance(bytes[..i]).HasValue)
+            if (MinDistance(bytes[..i]).HasValue)
             {
-                return bytes[i-1].ToString();
+                return bytes[i].ToString();
             }
         }
-
-        return null;
     }
 
     int? MinDistance(List<Point> bytes)
