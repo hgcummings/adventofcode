@@ -5,7 +5,7 @@ namespace HGC.AOC._2024._21;
 
 public class Part2 : ISolution
 {
-    List<string> Numeric =
+    static readonly List<string> Numeric =
     [
         "789",
         "456",
@@ -13,7 +13,7 @@ public class Part2 : ISolution
         " 0A"
     ];
 
-    List<string> Directional =
+    static readonly List<string> Directional =
     [
         " ^A",
         "<v>"
@@ -25,16 +25,14 @@ public class Part2 : ISolution
             ExpandedCost(25, ShortestSequence(Numeric, code)) * Int64.Parse(code[..^1]));
     }
     
-    private ConcurrentDictionary<(int rnd, string str), long> costCache = new();
+    readonly ConcurrentDictionary<(int rnd, string str), long> costCache = new();
 
-    long ExpandedCost(int rounds, string input)
-    {
-        return costCache.GetOrAdd((rounds, input), key => rounds == 1
+    long ExpandedCost(int rounds, string input) =>
+        costCache.GetOrAdd((rounds, input), key => rounds == 1
             ? ShortestSequence(Directional, key.str).Length
             : key.str.Split('A')
                 .Sum(sub =>
                     ExpandedCost(key.rnd - 1, ShortestSequence(Directional, sub + 'A'))) - 1);
-    }
 
     string ShortestSequence(List<string> keypad, string input)
     {
