@@ -25,7 +25,7 @@ public class Part2 : ISolution
             AddLink(parts[1], parts[0]);
         }
 
-        for (var n = 4;; ++n)
+        for (var n = links.Max(e => e.Value.Count);; --n)
         {
             Console.WriteLine(n);
             
@@ -54,8 +54,8 @@ public class Part2 : ISolution
 
             foreach (var combination in combinations)
             {
-                if (combination.All(n1 => combination.All(n2 => n1 == n2 || links[n1].Contains
-                        (n2))))
+                if (combination.All(n1 => combination
+                        .All(n2 => n1 == n2 || links[n1].Contains(n2))))
                 {
                     yield return combination.Concat(new[] {entry.Key});
                 }
