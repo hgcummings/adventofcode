@@ -9,6 +9,11 @@ public static class FileHelpers
         return new StreamReader(stream);
     }
     
+    public static string ReadInput(this ISolution obj)
+    {
+        return GetInputStream(obj, "input.txt").ReadToEnd();
+    }
+    
     public static string ReadInput(this ISolution obj, string resourceName)
     {
         return GetInputStream(obj, resourceName).ReadToEnd();
