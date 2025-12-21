@@ -22,8 +22,14 @@
       <EmbeddedResource Include="08\input.txt" />
       <EmbeddedResource Include="09\example.txt" />
       <EmbeddedResource Include="09\input.txt" />
+      <EmbeddedResource Include="10\example.txt" />
+      <EmbeddedResource Include="10\input.txt" />
       <None Remove="08\example.txt" />
       <EmbeddedResource Include="08\example.txt" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Combinatorics" Version="2.0.0" />
     </ItemGroup>
 
 </Project>
